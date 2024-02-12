@@ -34,8 +34,6 @@ export default {
     if (blingResponse.success === false) {
       return response.status(400).json(blingResponse)
     }
-    return response.json({
-      blingResponse,
-    })
+    return response.json(blingResponse)
   },
 }
