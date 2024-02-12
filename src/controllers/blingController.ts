@@ -16,7 +16,10 @@ export default {
       .products()
       .update(sku, sdata)
       .then(() => {
-        return { success: true }
+        return {
+          success: true,
+          remoteAddress: request.connection.remoteAddress,
+        }
       })
       .catch((err) => {
         const errors = err.data?.errors[0]
