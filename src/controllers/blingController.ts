@@ -18,7 +18,7 @@ export default {
       .then(() => {
         return {
           success: true,
-          remoteAddress: request.connection.remoteAddress,
+          remoteAddress: request.connection.remoteAddress || 'Não informado',
         }
       })
       .catch((err) => {
