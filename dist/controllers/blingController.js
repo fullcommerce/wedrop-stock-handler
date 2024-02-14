@@ -24,7 +24,10 @@ exports.default = {
                 .products()
                 .update(sku, sdata)
                 .then(() => {
-                return { success: true };
+                return {
+                    success: true,
+                    remoteAddress: request.connection.remoteAddress || 'Não informado',
+                };
             })
                 .catch((err) => {
                 var _a;
@@ -39,9 +42,7 @@ exports.default = {
             if (blingResponse.success === false) {
                 return response.status(400).json(blingResponse);
             }
-            return response.json({
-                blingResponse,
-            });
+            return response.json(blingResponse);
         });
     },
 };
