@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const blingController_1 = __importDefault(require("./controllers/blingController"));
 const axios_1 = __importDefault(require("axios"));
-const rateLimiter_1 = require("./middlewares/rateLimiter");
 const routes = (0, express_1.Router)();
 routes.get('/', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const ip = yield axios_1.default
@@ -37,6 +36,6 @@ routes.get('/', (request, response) => __awaiter(void 0, void 0, void 0, functio
         simpleRequest,
     });
 }));
-routes.post('/update', rateLimiter_1.rateLimiter, blingController_1.default.update);
+routes.post('/update', blingController_1.default.update);
 exports.default = routes;
 //# sourceMappingURL=routes.js.map

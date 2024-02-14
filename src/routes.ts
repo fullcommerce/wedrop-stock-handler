@@ -27,6 +27,6 @@ routes.get('/', async (request: Request, response: Response) => {
   })
 })
 
-routes.post('/update', rateLimiter, blingController.update)
+routes.post('/update', blingController.update)
 
 export default routes
