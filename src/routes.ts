@@ -1,7 +1,6 @@
 import { Router, Request, Response } from 'express'
 import blingController from './controllers/blingController'
 import axios from 'axios'
-import { rateLimiter } from './middlewares/rateLimiter'
 const routes = Router()
 
 routes.get('/', async (request: Request, response: Response) => {

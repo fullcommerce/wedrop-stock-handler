@@ -11,9 +11,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json({
     limit: '200mb',
 }));
-app.use(routes_1.default);
 app.use((err, request, response, next) => {
-    console.log('teste');
     if (err instanceof Error) {
         return response.status(400).json({
             error: err.message,
@@ -26,6 +24,7 @@ app.use((err, request, response, next) => {
         err,
     });
 });
+app.use(routes_1.default);
 app.listen(process.env.PORT, () => {
     console.log(`Server started on port ${process.env.PORT}`);
 });
