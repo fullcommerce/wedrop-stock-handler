@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express'
 import blingController from './controllers/blingController'
-import axios from 'axios'
 import blingV3Controller from './controllers/blingV3Controller'
 import { ensureAuthenticateUser } from './middlewares/ensureAuthenticateUser'
 const routes = Router()
