@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express'
 import blingController from './controllers/blingController'
 import axios from 'axios'
+import blingV3Controller from './controllers/blingV3Controller'
+import { ensureAuthenticateUser } from './middlewares/ensureAuthenticateUser'
 const routes = Router()
 
 routes.get('/', async (request: Request, response: Response) => {
@@ -27,5 +29,37 @@ routes.get('/', async (request: Request, response: Response) => {
 })
 
 routes.post('/update', blingController.update)
+routes.get(
+  '/bling-v3/wedrop-products',
+  ensureAuthenticateUser,
+  blingV3Controller.getWeDropProducts,
+)
 
+routes.get(
+  '/bling-v3/find-new-orders',
+  ensureAuthenticateUser,
+  blingV3Controller.findNewOrders,
+)
+routes.get(
+  '/bling-v3/import-order',
+  ensureAuthenticateUser,
+  blingV3Controller.importOrder,
+)
+
+routes.post(
+  '/bling-v3/send-product',
+  ensureAuthenticateUser,
+  blingV3Controller.sendProduct,
+)
+
+routes.post(
+  '/bling-v3/send-variation',
+  ensureAuthenticateUser,
+  blingV3Controller.sendVariation,
+)
+routes.post(
+  '/bling-v3/send-kit',
+  ensureAuthenticateUser,
+  blingV3Controller.sendKit,
+)
 export default routes
