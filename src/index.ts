@@ -29,5 +29,7 @@ app.use(
 app.use(routes)
 
 app.listen(process.env.PORT, () => {
-  console.log(`Server started on port ${process.env.PORT}`)
+  console.log(
+    `Server started on port ${process.env.PORT} at ${new Date().toLocaleString('pt-BR')}`,
+  )
 })
