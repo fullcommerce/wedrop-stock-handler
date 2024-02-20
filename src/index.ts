@@ -34,8 +34,11 @@ app.use(
 )
 app.use(routes)
 
+const now = new Date()
+now.setHours(now.getHours() - 3)
+
 app.listen(process.env.PORT, () => {
   console.log(
-    `Server started on port ${process.env.PORT} at ${new Date().toLocaleString('pt-BR')}`,
+    `Server started on port ${process.env.PORT} at ${now.toLocaleString('pt-BR')}`,
   )
 })
