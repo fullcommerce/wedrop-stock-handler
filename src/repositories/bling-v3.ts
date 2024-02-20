@@ -159,8 +159,8 @@ export class BlingV3 {
       .then((response) => {
         return response.data
       })
-      .catch(async (error: AxiosError) => {
-        return error.response.data
+      .catch(async (error: any) => {
+        return { isError: true, ...error?.response?.data }
       })
   }
 
