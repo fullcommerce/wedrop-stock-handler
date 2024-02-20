@@ -37,6 +37,7 @@ async function updateAndBuild() {
       await runCommand('npm run build')
 
       console.log('Atualização e build concluídas com sucesso.')
+      console.log('Reiniciando o servidor...')
     } else {
       console.log('Nenhuma atualização disponível no repositório remoto.')
     }
