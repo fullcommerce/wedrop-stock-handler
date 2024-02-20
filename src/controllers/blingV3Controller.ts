@@ -993,7 +993,7 @@ export default {
         },
         operacao: 'B',
         quantidade: stock,
-        observacoes: `Estoque atualizado pelo WeDrop em ${now.toLocaleString('pt-BR')}`,
+        observacoes: `Estoque atualizado pelo WeDrop ${now.toLocaleString('pt-BR')}`,
       })
       .catch((error) => {
         return error.response.data
