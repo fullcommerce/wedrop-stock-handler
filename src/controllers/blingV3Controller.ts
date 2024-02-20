@@ -964,4 +964,21 @@ export default {
 
     return res.json({ ...newOrder, transaction })
   },
+
+  async updateStock(req: Request, res: Response) {
+    const { integrationId, productId, warehouseId, stock } = req.body
+    const integration = await prisma.integrations.findFirst({
+      where: {
+        id: Number(integrationId),
+      },
+    })
+    const blingUserProduct = await prisma.bling_user_products.findFirst({
+      where: {
+        product_id: Number(productId),
+        integration_id: Number(integrationId),
+      },
+    })
+
+    return res.json({ integration, blingUserProduct })
+  },
 }

@@ -26,6 +26,7 @@ routes.get('/', async (request: Request, response: Response) => {
 })
 
 routes.post('/update', blingController.update)
+routes.post('/v3-update', blingV3Controller.updateStock)
 routes.get(
   '/bling-v3/wedrop-products',
   ensureAuthenticateUser,
