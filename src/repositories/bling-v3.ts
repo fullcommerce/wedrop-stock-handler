@@ -154,9 +154,14 @@ export class BlingV3 {
   }
 
   async updateStock(data: any) {
-    return await this.client.post('/estoques', data).then((response) => {
-      return response.data
-    })
+    return await this.client
+      .post('/estoques', data)
+      .then((response) => {
+        return response.data
+      })
+      .catch(async (error: AxiosError) => {
+        return error.response.data
+      })
   }
 
   async updateToken() {

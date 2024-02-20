@@ -966,7 +966,7 @@ export default {
   },
 
   async updateStock(req: Request, res: Response) {
-    const { integrationId, warehouseId, blingProducId, stock } = req.body
+    const { integrationId, warehouseId, blingProductId, stock } = req.body
     const integration = await prisma.integrations.findFirst({
       where: {
         id: Number(integrationId),
@@ -983,7 +983,7 @@ export default {
 
     const responseBling = await blingClient.updateStock({
       produto: {
-        id: blingProducId,
+        id: blingProductId,
       },
       deposito: {
         id: warehouseId,
