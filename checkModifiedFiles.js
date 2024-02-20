@@ -16,7 +16,7 @@ async function updateAndBuild() {
   try {
     // Verifica se há atualizações no repositório remoto
     const remoteChanges = await runCommand(
-      'git fetch && git log HEAD..origin/main --online',
+      'git fetch && git log HEAD..origin/main --oneline',
     )
 
     if (remoteChanges) {
