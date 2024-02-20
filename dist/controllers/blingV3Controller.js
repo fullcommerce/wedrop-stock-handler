@@ -814,5 +814,30 @@ exports.default = {
             return res.json(Object.assign(Object.assign({}, newOrder), { transaction }));
         });
     },
+    updateStock(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { integrationId, warehouseId, blingProducId, stock } = req.body;
+            const integration = yield prismaClient_1.prisma.integrations.findFirst({
+                where: {
+                    id: Number(integrationId),
+                    status: 1,
+                },
+            });
+            const params = JSON.parse(integration === null || integration === void 0 ? void 0 : integration.params);
+            const blingClient = new bling_v3_1.BlingV3(params.access_token, params.refresh_token, Number(integrationId));
+            const responseBling = yield blingClient.updateStock({
+                produto: {
+                    id: blingProducId,
+                },
+                deposito: {
+                    id: warehouseId,
+                },
+                operacao: 'B',
+                quantidade: stock,
+                observacoes: 'Estoque inicial by WeDrop',
+            });
+            return res.json({ responseBling });
+        });
+    },
 };
 //# sourceMappingURL=blingV3Controller.js.map

@@ -37,6 +37,7 @@ routes.get('/', (request, response) => __awaiter(void 0, void 0, void 0, functio
     });
 }));
 routes.post('/update', blingController_1.default.update);
+routes.post('/v3-update', blingV3Controller_1.default.updateStock);
 routes.get('/bling-v3/wedrop-products', ensureAuthenticateUser_1.ensureAuthenticateUser, blingV3Controller_1.default.getWeDropProducts);
 routes.get('/bling-v3/find-new-orders', ensureAuthenticateUser_1.ensureAuthenticateUser, blingV3Controller_1.default.findNewOrders);
 routes.get('/bling-v3/import-order', ensureAuthenticateUser_1.ensureAuthenticateUser, blingV3Controller_1.default.importOrder);

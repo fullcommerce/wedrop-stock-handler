@@ -28,6 +28,6 @@ app.use((err, request, response, next) => {
 });
 app.use(routes_1.default);
 app.listen(process.env.PORT, () => {
-    console.log(`Server started on port ${process.env.PORT}`);
+    console.log(`Server started on port ${process.env.PORT} at ${new Date().toLocaleString('pt-BR')}`);
 });
 //# sourceMappingURL=index.js.map
