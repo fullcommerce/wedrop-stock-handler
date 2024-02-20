@@ -966,19 +966,33 @@ export default {
   },
 
   async updateStock(req: Request, res: Response) {
-    const { integrationId, productId, warehouseId, stock } = req.body
+    const { integrationId, warehouseId, blingProducId, stock } = req.body
     const integration = await prisma.integrations.findFirst({
       where: {
         id: Number(integrationId),
+        status: 1,
       },
     })
-    const blingUserProduct = await prisma.bling_user_products.findFirst({
-      where: {
-        product_id: Number(productId),
-        integration_id: Number(integrationId),
+    const params = JSON.parse(integration?.params)
+
+    const blingClient = new BlingV3(
+      params.access_token,
+      params.refresh_token,
+      Number(integrationId),
+    )
+
+    const responseBling = await blingClient.updateStock({
+      produto: {
+        id: blingProducId,
       },
+      deposito: {
+        id: warehouseId,
+      },
+      operacao: 'B',
+      quantidade: stock,
+      observacoes: 'Estoque inicial by WeDrop',
     })
 
-    return res.json({ integration, blingUserProduct })
+    return res.json({ responseBling })
   },
 }
