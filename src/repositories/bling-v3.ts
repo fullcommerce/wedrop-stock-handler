@@ -160,6 +160,7 @@ export class BlingV3 {
         return response.data
       })
       .catch(async (error: any) => {
+        console.log('error on update stock', error.response.data)
         return { isError: true, ...error?.response?.data }
       })
   }
