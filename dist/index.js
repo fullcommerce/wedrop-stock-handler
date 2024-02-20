@@ -14,6 +14,12 @@ app.use(express_1.default.json({
     limit: '200mb',
 }));
 app.use((err, request, response, next) => {
+    if (err instanceof SyntaxError) {
+        return response.status(400).json({
+            error: 'Invalid JSON',
+            response: response === null || response === void 0 ? void 0 : response.data,
+        });
+    }
     if (err instanceof Error) {
         return response.status(400).json({
             error: err.message,

@@ -816,7 +816,7 @@ exports.default = {
     },
     updateStock(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { integrationId, warehouseId, blingProducId, stock } = req.body;
+            const { integrationId, warehouseId, blingProductId, stock } = req.body;
             const integration = yield prismaClient_1.prisma.integrations.findFirst({
                 where: {
                     id: Number(integrationId),
@@ -825,9 +825,10 @@ exports.default = {
             });
             const params = JSON.parse(integration === null || integration === void 0 ? void 0 : integration.params);
             const blingClient = new bling_v3_1.BlingV3(params.access_token, params.refresh_token, Number(integrationId));
-            const responseBling = yield blingClient.updateStock({
+            const responseBling = yield blingClient
+                .updateStock({
                 produto: {
-                    id: blingProducId,
+                    id: blingProductId,
                 },
                 deposito: {
                     id: warehouseId,
@@ -835,6 +836,9 @@ exports.default = {
                 operacao: 'B',
                 quantidade: stock,
                 observacoes: 'Estoque inicial by WeDrop',
+            })
+                .catch((error) => {
+                return error.response.data;
             });
             return res.json({ responseBling });
         });

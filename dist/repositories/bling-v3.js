@@ -141,9 +141,16 @@ class BlingV3 {
     }
     updateStock(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.client.post('/estoques', data).then((response) => {
+            return yield this.client
+                .post('/estoques', data)
+                .then((response) => {
                 return response.data;
-            });
+            })
+                .catch((error) => __awaiter(this, void 0, void 0, function* () {
+                var _a;
+                console.log('error on update stock', error.response.data);
+                return Object.assign({ isError: true }, (_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data);
+            }));
         });
     }
     updateToken() {
