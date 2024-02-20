@@ -991,7 +991,7 @@ export default {
         },
         operacao: 'B',
         quantidade: stock,
-        observacoes: 'Estoque inicial by WeDrop',
+        observacoes: `Estoque atualizado pelo WeDrop em ${new Date().toLocaleString()}`,
       })
       .catch((error) => {
         return error.response.data
