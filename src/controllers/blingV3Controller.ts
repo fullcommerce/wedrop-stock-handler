@@ -967,6 +967,8 @@ export default {
 
   async updateStock(req: Request, res: Response) {
     const { integrationId, warehouseId, blingProductId, stock } = req.body
+    const now = new Date()
+    now.setHours(now.getHours() - 3)
     const integration = await prisma.integrations.findFirst({
       where: {
         id: Number(integrationId),
@@ -991,7 +993,7 @@ export default {
         },
         operacao: 'B',
         quantidade: stock,
-        observacoes: `Estoque atualizado pelo WeDrop em ${new Date().toLocaleString('pt-BR')}`,
+        observacoes: `Estoque atualizado pelo WeDrop em ${now.toLocaleString('pt-BR')}`,
       })
       .catch((error) => {
         return error.response.data
