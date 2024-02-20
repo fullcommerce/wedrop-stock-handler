@@ -12,6 +12,12 @@ app.use(
 )
 app.use(
   (err: Error, request: Request, response: Response, next: NextFunction) => {
+    if (err instanceof SyntaxError) {
+      return response.status(400).json({
+        error: 'Invalid JSON',
+        response: response?.data,
+      })
+    }
     if (err instanceof Error) {
       return response.status(400).json({
         error: err.message,
