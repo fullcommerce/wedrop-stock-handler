@@ -626,7 +626,7 @@ export default {
         quantidade: product.stock,
         observacoes: 'Estoque inicial by WeDrop',
       })
-      return res.json({ responseProduct, stock, productData })
+      return res.json({ product: responseProduct.data, stock, productData })
     }
     return res.status(400).json({ responseProduct, productData })
   },
