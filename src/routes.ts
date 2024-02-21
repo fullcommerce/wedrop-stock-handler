@@ -54,6 +54,12 @@ routes.post(
   ensureAuthenticateUser,
   blingV3Controller.sendProductWithStructure,
 )
+
+routes.post(
+  '/bling-v3/add-product-to-store',
+  ensureAuthenticateUser,
+  blingV3Controller.addProductToStore,
+)
 routes.post(
   '/bling-v3/send-variation',
   ensureAuthenticateUser,
@@ -64,4 +70,5 @@ routes.post(
   ensureAuthenticateUser,
   blingV3Controller.sendKit,
 )
+
 export default routes

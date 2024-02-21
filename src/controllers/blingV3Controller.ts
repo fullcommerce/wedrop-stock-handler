@@ -1021,4 +1021,35 @@ export default {
     const responseProduct = await blingClient.createProduct(productData)
     return res.json({ product: responseProduct, productData })
   },
+
+  async addProductToStore(req: Request, res: Response) {
+    const { integrationId, customProduct, userId } = req.body
+
+    const integration = await prisma.integrations.findFirst({
+      where: {
+        id: Number(integrationId),
+        user_id: Number(userId),
+      },
+    })
+    const params = JSON.parse(integration?.params)
+    const blingClient = new BlingV3(
+      params.access_token,
+      params.refresh_token,
+      Number(integrationId),
+    )
+
+    const storeData = {
+      codigo: customProduct.codigo,
+      preco: customProduct.preco,
+      produto: {
+        id: customProduct.id,
+      },
+      loja: {
+        id: customProduct.bling_store_id,
+      },
+    }
+    const responseStore = await blingClient.addProductToStore(storeData)
+
+    return res.json(responseStore)
+  },
 }

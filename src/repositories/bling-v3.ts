@@ -230,4 +230,21 @@ export class BlingV3 {
   async apiError(error: AxiosError) {
     return Promise.reject(error)
   }
+
+  async addProductToStore({ codigo, preco, produto, loja }) {
+    return await this.client
+      .post('/produtos/lojas', {
+        codigo,
+        preco,
+        produto,
+        loja,
+      })
+      .then((response) => {
+        return response.data
+      })
+      .catch(async (error: AxiosError) => {
+        console.log('error on add product to store', error.response.data)
+        return { isError: true, error: error.response.data }
+      })
+  }
 }
