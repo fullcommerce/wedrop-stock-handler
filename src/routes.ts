@@ -49,7 +49,11 @@ routes.post(
   ensureAuthenticateUser,
   blingV3Controller.sendProduct,
 )
-
+routes.post(
+  '/bling-v3/send-custom-product',
+  ensureAuthenticateUser,
+  blingV3Controller.sendProductWithStructure,
+)
 routes.post(
   '/bling-v3/send-variation',
   ensureAuthenticateUser,

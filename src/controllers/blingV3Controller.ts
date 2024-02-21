@@ -1001,4 +1001,24 @@ export default {
 
     return res.json({ responseBling })
   },
+
+  async sendProductWithStructure(req: Request, res: Response) {
+    const { productData, integrationId, userId } = req.body
+
+    const integration = await prisma.integrations.findFirst({
+      where: {
+        id: Number(integrationId),
+        user_id: Number(userId),
+      },
+    })
+    const params = JSON.parse(integration?.params)
+    const blingClient = new BlingV3(
+      params.access_token,
+      params.refresh_token,
+      Number(integrationId),
+    )
+
+    const responseProduct = await blingClient.createProduct(productData)
+    return res.json({ product: responseProduct, productData })
+  },
 }
