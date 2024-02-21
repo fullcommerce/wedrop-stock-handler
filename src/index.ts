@@ -40,5 +40,5 @@ app.listen(process.env.PORT, () => {
   console.log(
     `Server started on port ${process.env.PORT} at ${now.toLocaleString('pt-BR')}`,
   )
-  console.log('Press Ctrl+C to quit.')
+  console.log('Press Ctrl+C to quit!')
 })
