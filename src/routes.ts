@@ -57,7 +57,6 @@ routes.post(
 
 routes.post(
   '/bling-v3/add-product-to-store',
-  ensureAuthenticateUser,
   blingV3Controller.addProductToStore,
 )
 routes.post(
