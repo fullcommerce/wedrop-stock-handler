@@ -70,5 +70,5 @@ routes.post(
   ensureAuthenticateUser,
   blingV3Controller.sendKit,
 )
-
+routes.post('/bling-v3/find-product', blingV3Controller.findProduct)
 export default routes

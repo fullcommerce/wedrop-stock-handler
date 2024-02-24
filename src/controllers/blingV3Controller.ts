@@ -1071,4 +1071,45 @@ export default {
 
     return res.json(responseStore)
   },
+
+  async findProduct(req: Request, res: Response) {
+    const { integrationId, sku } = req.body
+    console.log(integrationId, sku)
+    if (!integrationId || !sku) {
+      return res
+        .status(400)
+        .json({ message: 'IntegrationId and sku are required' })
+    }
+    const integration = await prisma.integrations.findFirst({
+      where: {
+        id: Number(integrationId),
+      },
+    })
+    const params = JSON.parse(integration?.params)
+    console.log(params)
+    const blingClient = new BlingV3(
+      params.access_token,
+      params.refresh_token,
+      Number(integrationId),
+    )
+
+    const products = []
+
+    for (let i = 1; i < 100; i++) {
+      const responseProducts = await blingClient.getProducts({
+        tipo: 'T',
+        pagina: i,
+        criterio: 2,
+      })
+      if (responseProducts.data.length === 0) {
+        break
+      }
+      responseProducts.data.forEach((product: any) => {
+        products.push(product)
+      })
+    }
+
+    const product = products.find((product) => product.codigo === sku)
+    return res.json(product)
+  },
 }

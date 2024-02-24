@@ -180,7 +180,7 @@ export class BlingV3 {
     return await bling
       .postForm('/oauth/token', {
         grant_type: 'refresh_token',
-        refresh_token: this.refreshToken.trim(),
+        refresh_token: this?.refreshToken?.trim(),
       })
       .then(async (response) => {
         await prisma.integrations.update({
