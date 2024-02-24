@@ -191,6 +191,8 @@ model integrations {
   bling_user_products                                                bling_user_products[]
   fullfilment_orders_fullfilment_orders_erp_idTointegrations         fullfilment_orders[]        @relation("fullfilment_orders_erp_idTointegrations")
   fullfilment_orders_fullfilment_orders_integration_idTointegrations fullfilment_orders[]        @relation("fullfilment_orders_integration_idTointegrations")
+  queue_fastad_queue_fastad_integration_idTointegrations             queue_fastad[]              @relation("queue_fastad_integration_idTointegrations")
+  queue_fastad_queue_fastad_erp_idTointegrations                     queue_fastad[]              @relation("queue_fastad_erp_idTointegrations")
   user_product_mercadolivre                                          user_product_mercadolivre[]
 
   @@index([bling_id], map: "bling_id")
@@ -572,6 +574,7 @@ model products {
   fullfilment_order_products   fullfilment_order_products[]
   picking_records              picking_records[]
   products_ml                  products_ml[]
+  queue_fastad                 queue_fastad[]
   user_mercadolivre_variations user_mercadolivre_variations[]
   user_product_mercadolivre    user_product_mercadolivre[]
   variation_products           variation_products[]
@@ -898,6 +901,7 @@ model users {
   fullfilment_orders_fullfilment_orders_user_deliveredTousers            fullfilment_orders[]         @relation("fullfilment_orders_user_deliveredTousers")
   picking_records                                                        picking_records[]
   promo_ranking                                                          promo_ranking[]
+  queue_fastad                                                           queue_fastad[]
   user_product_mercadolivre                                              user_product_mercadolivre[]
   variations                                                             variations[]
   wallet_payments                                                        wallet_payments[]
@@ -963,4 +967,38 @@ model wallet_payments {
   @@index([transaction_id], map: "FK1wallet_transaction_id")
   @@index([user_id], map: "FK2wallet_user_id")
   @@index([gateway_payment_id], map: "gateway_payment_id")
+}
+
+model queue_fastad {
+  id                                                     Int          @id @default(autoincrement())
+  user_id                                                Int
+  product_id                                             Int
+  integration_id                                         Int
+  erp_id                                                 Int
+  item_id                                                String?      @db.VarChar(50)
+  channel                                                String       @default(dbgenerated("()")) @db.VarChar(50)
+  inputData                                              String       @db.LongText
+  result                                                 String?      @db.LongText
+  status                                                 String       @default(dbgenerated("(pending)")) @db.VarChar(50)
+  users                                                  users        @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "FK1_user")
+  products                                               products     @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "FK2_product_id")
+  integrations_queue_fastad_integration_idTointegrations integrations @relation("queue_fastad_integration_idTointegrations", fields: [integration_id], references: [id], onDelete: Cascade, map: "FK3_integration_id")
+  integrations_queue_fastad_erp_idTointegrations         integrations @relation("queue_fastad_erp_idTointegrations", fields: [erp_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK4_erp_id")
+
+  @@index([user_id], map: "FK1_user")
+  @@index([product_id], map: "FK2_product_id")
+  @@index([integration_id], map: "FK3_integration_id")
+  @@index([erp_id], map: "FK4_erp_id")
+}
+
+model queue_mapper {
+  id             Int     @id @default(autoincrement())
+  user_id        Int     @default(0)
+  integration_id Int     @default(0)
+  erp_id         Int     @default(0)
+  item_id        String  @default(dbgenerated("(0)")) @db.VarChar(255)
+  inputData      String  @db.LongText
+  channel        String? @db.VarChar(50)
+  result         String? @db.LongText
+  status         String  @default(dbgenerated("(pending)")) @db.VarChar(255)
 }
