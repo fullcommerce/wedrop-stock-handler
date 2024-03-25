@@ -201,7 +201,10 @@ export class BlingV3 {
       })
       .catch(async (error: AxiosError) => {
         console.log('error on refresh token', error.response.data)
-        await this.apiError({ message: 'error on refresh token', ...error })
+        const returnError = error?.response?.data
+          ? error?.response?.data
+          : error
+        await this.apiError(returnError)
       })
   }
 
@@ -227,7 +230,7 @@ export class BlingV3 {
       })
   }
 
-  async apiError(error: AxiosError) {
+  async apiError(error: any) {
     return Promise.reject(error)
   }
 

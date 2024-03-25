@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express'
+import 'express-async-errors'
 import blingController from './controllers/blingController'
 import blingV3Controller from './controllers/blingV3Controller'
 import { ensureAuthenticateUser } from './middlewares/ensureAuthenticateUser'
@@ -33,11 +34,7 @@ routes.get(
   blingV3Controller.getWeDropProducts,
 )
 
-routes.get(
-  '/bling-v3/find-new-orders',
-  ensureAuthenticateUser,
-  blingV3Controller.findNewOrders,
-)
+routes.get('/bling-v3/find-new-orders', blingV3Controller.findNewOrders)
 routes.get(
   '/bling-v3/import-order',
   ensureAuthenticateUser,
