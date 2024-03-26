@@ -81,7 +81,6 @@ export default {
 
   async findNewOrders(req: Request, res: Response) {
     const { integrationId, startDate, endDate } = req.query
-    const { userId } = req.body
     const today = new Date()
     const yesterday = new Date(today)
     yesterday.setDate(yesterday.getDate() - 1)
@@ -98,6 +97,7 @@ export default {
         id: Number(integrationId),
       },
     })
+    const userId = integration.user_id
     const params = JSON.parse(integration?.params)
     const blingClient = new BlingV3(
       params.access_token,
