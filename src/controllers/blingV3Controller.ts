@@ -110,7 +110,7 @@ export default {
       const responseOrders = await blingClient.getSellOrders({
         initDate,
         endDate: stopDate,
-        situations: [6, 15],
+        // situations: [6, 15],
         page: i,
       })
       responseOrders.data.forEach((order: any) => {
