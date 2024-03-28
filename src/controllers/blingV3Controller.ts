@@ -633,17 +633,21 @@ export default {
 
   async importOrder(req: Request, res: Response) {
     const { erpId, integrationId, blingId } = req.query
-    const { userId } = req.body
     const erp = await prisma.integrations.findFirst({
       where: {
-        user_id: Number(userId),
         id: Number(erpId),
       },
     })
+    if (!erp) {
+      return res.status(400).json({ message: 'ERP not found' })
+    }
+    if (!erp?.user_id) {
+      return res.status(400).json({ message: 'User not found' })
+    }
     const params = JSON.parse(erp?.params)
     const integration = await prisma.integrations.findFirst({
       where: {
-        user_id: Number(userId),
+        user_id: erp.user_id,
         id: Number(integrationId),
       },
     })
@@ -733,7 +737,7 @@ export default {
     ]
 
     const newOrderData = {
-      user_id: Number(userId),
+      user_id: erp.user_id,
       integration_id: Number(integrationId),
       channel_order: String(
         blingOrder.numeroLoja ? blingOrder.numeroLoja : blingOrder.numero,
@@ -753,7 +757,7 @@ export default {
     }
     const orderProducts = []
     const orderCosts = []
-    const orderModel = new Order(Number(userId))
+    const orderModel = new Order(Number(erp.user_id))
     let totalCost = 0
     let isNotFound = false
     for (const item of blingOrder.itens) {
@@ -792,7 +796,7 @@ export default {
           } else {
             orderProducts.push({
               product_id: kitItem.id,
-              user_id: Number(userId),
+              user_id: Number(erp.user_id),
               qtd: kitItem.totalQtd,
               suplier_id: 13,
             })
@@ -829,7 +833,7 @@ export default {
         } else {
           orderProducts.push({
             product_id: isAlias.id,
-            user_id: Number(userId),
+            user_id: Number(erp.user_id),
             qtd: isAlias.totalQtd,
             suplier_id: 13,
           })
@@ -865,7 +869,7 @@ export default {
         } else {
           orderProducts.push({
             product_id: isProduct.id,
-            user_id: Number(userId),
+            user_id: Number(erp.user_id),
             qtd: item.quantidade,
             suplier_id: 13,
           })
