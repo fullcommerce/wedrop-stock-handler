@@ -35,11 +35,7 @@ routes.get(
 )
 
 routes.get('/bling-v3/find-new-orders', blingV3Controller.findNewOrders)
-routes.get(
-  '/bling-v3/import-order',
-  ensureAuthenticateUser,
-  blingV3Controller.importOrder,
-)
+routes.get('/bling-v3/import-order', blingV3Controller.importOrder)
 
 routes.post(
   '/bling-v3/send-product',
