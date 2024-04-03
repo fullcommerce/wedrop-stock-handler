@@ -241,7 +241,10 @@ export class BlingV3 {
         return response.data
       })
       .catch((error) => {
-        console.log('error on refresh token', error)
+        console.log(
+          `[BLING V3 REFRESH TOKEN ${this.integrationId}] ERROR ON REFRESH TOKEN`,
+          error,
+        )
         return Promise.reject(error)
       })
   }
