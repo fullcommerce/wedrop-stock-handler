@@ -3,7 +3,7 @@ import 'express-async-errors'
 import blingController from './controllers/blingController'
 import blingV3Controller from './controllers/blingV3Controller'
 import { ensureAuthenticateUser } from './middlewares/ensureAuthenticateUser'
-import rateLimitMiddleware, { rateLimiter } from './middlewares/rateLimiter'
+import rateLimitMiddleware from './middlewares/rateLimiter'
 const routes = Router()
 
 routes.get('/', async (request: Request, response: Response) => {
