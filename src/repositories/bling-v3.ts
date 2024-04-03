@@ -239,6 +239,10 @@ export class BlingV3 {
         this.accessToken = response.data.access_token
         return response.data
       })
+      .catch((error) => {
+        console.log('error on refresh token', error.response.data)
+        return Promise.reject(error)
+      })
   }
 
   async getOrder(id: number) {
