@@ -999,15 +999,14 @@ export default {
         quantidade: stock,
         observacoes: `Estoque atualizado pelo WeDrop ${now.toLocaleString('pt-BR')}`,
       })
-      .catch((error) => {
+      .catch(() => {
         return {
           isError: true,
-          error,
         }
       })
 
     if (responseBling?.isError) {
-      return res.status(500).json({ error: responseBling?.error })
+      return res.status(500).json({ error: 'Erro ao atualizar o estoque' })
     }
     return res.json({ responseBling })
   },
