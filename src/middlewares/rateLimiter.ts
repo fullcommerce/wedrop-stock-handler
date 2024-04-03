@@ -7,6 +7,7 @@ const rateLimitMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
+  console.log('v2 queue size', requestQueue.size)
   requestQueue.add(() => Promise.resolve()).then(next)
 }
 
