@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance } from 'axios'
 import { config } from 'dotenv'
 import { prisma } from '../database/prismaClient'
+import { blingRequestQueue } from './blingRequestQueue'
 config()
 export class BlingV3 {
   private accessToken: string
@@ -21,6 +22,12 @@ export class BlingV3 {
         authorization: `Bearer ${this.accessToken}`,
         'Content-Type': 'application/json',
       },
+    })
+
+    this.client.interceptors.request.use(async (config) => {
+      console.log('queue size', blingRequestQueue.size)
+      await blingRequestQueue.add(() => Promise.resolve())
+      return config
     })
 
     this.client.interceptors.response.use(
