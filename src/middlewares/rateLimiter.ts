@@ -5,6 +5,7 @@ const requestQueue = new PQueue({
   intervalCap: 5,
   concurrency: 1,
 })
+let count = 0
 
 const rateLimitMiddleware = (
   req: Request,
@@ -13,7 +14,11 @@ const rateLimitMiddleware = (
 ) => {
   /* console.log('[BLING V2] - QUEUE SIZE: ', requestQueue.size)
   console.log('[BLING V2] - ADDING REQUEST TO QUEUE ' + req.url) */
-
+  requestQueue.on('active', () => {
+    console.log(
+      `[BLING V2] Working on item #${++count}.  Size: ${requestQueue.size}  Pending: ${requestQueue.pending}`,
+    )
+  })
   requestQueue.add(() => Promise.resolve()).then(next)
 }
 
