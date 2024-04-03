@@ -57,6 +57,7 @@ export class BlingV3 {
               const errorResponse = error.response.data?.error
               console.log('ERROR TYPE', errorResponse.type)
               if (
+                !errorResponse.type ||
                 errorResponse.type.trim() === 'FORBIDDEN' ||
                 errorResponse.type.trim() === 'invalid_grant'
               ) {
