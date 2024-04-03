@@ -11,7 +11,9 @@ const rateLimitMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log('v2 queue size', requestQueue.size)
+  console.log('[BLING V2] - QUEUE SIZE: ', requestQueue.size)
+  console.log('[BLING V2] - ADDING REQUEST TO QUEUE ' + req.url)
+
   requestQueue.add(() => Promise.resolve()).then(next)
 }
 

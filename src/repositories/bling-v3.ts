@@ -25,7 +25,8 @@ export class BlingV3 {
     })
 
     this.client.interceptors.request.use(async (config) => {
-      console.log('queue size', blingRequestQueue.size)
+      console.log('[BLING V3] - QUEUE SIZE: ', blingRequestQueue.size)
+      console.log('[BLING V3] - SENDING REQUEST ' + config.url)
       await blingRequestQueue.add(() => Promise.resolve())
       return config
     })
