@@ -979,7 +979,19 @@ export default {
         status: 1,
       },
     })
-    const params = JSON.parse(integration?.params)
+
+    const params = JSON.parse(integration?.params || '{}')
+    if (!params.access_token || !params.refresh_token) {
+      await prisma.integrations.update({
+        where: {
+          id: Number(integrationId),
+        },
+        data: {
+          status: 0,
+        },
+      })
+      return res.status(400).json({ error: 'Credenciais não encontradas' })
+    }
 
     const blingClient = new BlingV3(
       params.access_token,

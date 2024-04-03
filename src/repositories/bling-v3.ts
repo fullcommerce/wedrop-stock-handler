@@ -46,7 +46,7 @@ export class BlingV3 {
 
               return Promise.resolve(this.client.request(error.config))
             })
-            .catch((error) => {
+            .catch(async (error) => {
               console.log(
                 `[BLING V3 ${this.integrationId}] - ERROR ON REFRESHING TOKEN`,
               )
@@ -54,6 +54,35 @@ export class BlingV3 {
                 `[BLING V3 ${this.integrationId}] - ERROR RESPONSE`,
                 error.response.data,
               )
+              const errorResponse = error.response.data?.error
+              console.log('ERROR TYPE', errorResponse.type)
+              if (
+                errorResponse.type.trim() === 'FORBIDDEN' ||
+                errorResponse.type.trim() === 'invalid_grant'
+              ) {
+                console.log(
+                  `[BLING V3 ${this.integrationId}] - DISABLING INTEGRATION`,
+                )
+                await prisma.integrations.update({
+                  where: {
+                    id: this.integrationId,
+                  },
+                  data: {
+                    status: 0,
+                  },
+                })
+                console.log(
+                  `[BLING V3 ${this.integrationId}] - INTEGRATION DISABLED`,
+                )
+                return Promise.resolve(() => {
+                  return {
+                    data: {
+                      error: 'Integração desativada por erro na configuração',
+                    },
+                  }
+                })
+              }
+
               throw Error('Error on refreshing token')
             })
         } else if (error.response.status === 429) {
@@ -244,10 +273,10 @@ export class BlingV3 {
         return response.data
       })
       .catch((error) => {
-        console.log(
+        /* console.log(
           `[BLING V3 REFRESH TOKEN ${this.integrationId}] ERROR ON REFRESH TOKEN`,
           error,
-        )
+        ) */
         return Promise.reject(error)
       })
   }
