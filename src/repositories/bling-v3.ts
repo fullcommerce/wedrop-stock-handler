@@ -46,11 +46,11 @@ export class BlingV3 {
 
               return Promise.resolve(this.client.request(error.config))
             })
-            .catch((error) => {
+            .catch(() => {
               console.log(
                 `[BLING V3 ${this.integrationId}] - ERROR ON REFRESHING TOKEN`,
               )
-              return Promise.reject(error)
+              throw Error('Error on refreshing token')
             })
         } else if (error.response.status === 429) {
           console.log(`[BLING V3 ${this.integrationId}] - RATE LIMIT EXCEEDED`)
@@ -191,6 +191,21 @@ export class BlingV3 {
         Authorization: `Basic ${base64Auth.toString('base64')}}`,
       },
     })
+
+    bling.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (error.response.status === 429) {
+          console.log(`[BLING V3 ${this.integrationId}] - RATE LIMIT EXCEEDED`)
+          console.log(
+            `[BLING V3 ${this.integrationId}] - ADDING TO RETRY QUEUE`,
+          )
+
+          await blingRequestQueue.add(() => Promise.resolve())
+          return Promise.resolve(bling.request(error.config))
+        }
+      },
+    )
     await blingRequestQueue.add(() => Promise.resolve())
     return await bling
       .postForm('/oauth/token', {
