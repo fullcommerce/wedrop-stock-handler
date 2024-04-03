@@ -976,9 +976,12 @@ export default {
     const integration = await prisma.integrations.findFirst({
       where: {
         id: Number(integrationId),
-        status: 1,
       },
     })
+
+    if (integration?.status === 0) {
+      return res.status(400).json({ error: 'Integração desativada' })
+    }
 
     const params = JSON.parse(integration?.params || '{}')
     if (!params.access_token || !params.refresh_token) {
