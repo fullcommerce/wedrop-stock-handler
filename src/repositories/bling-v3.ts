@@ -50,7 +50,7 @@ export class BlingV3 {
               console.log(
                 `[BLING V3 ${this.integrationId}] - ERROR ON REFRESHING TOKEN`,
               )
-              console.log(error)
+              console.log('error on refreshing token', error)
               throw Error('Error on refreshing token')
             })
         } else if (error.response.status === 429) {
