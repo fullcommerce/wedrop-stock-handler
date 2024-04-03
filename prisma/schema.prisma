@@ -983,7 +983,7 @@ model queue_fastad {
   users                                                  users        @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "FK1_user")
   products                                               products     @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "FK2_product_id")
   integrations_queue_fastad_integration_idTointegrations integrations @relation("queue_fastad_integration_idTointegrations", fields: [integration_id], references: [id], onDelete: Cascade, map: "FK3_integration_id")
-  integrations_queue_fastad_erp_idTointegrations         integrations @relation("queue_fastad_erp_idTointegrations", fields: [erp_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK4_erp_id")
+  integrations_queue_fastad_erp_idTointegrations         integrations @relation("queue_fastad_erp_idTointegrations", fields: [erp_id], references: [id], onDelete: Cascade, map: "FK4_erp_id")
 
   @@index([user_id], map: "FK1_user")
   @@index([product_id], map: "FK2_product_id")
