@@ -1005,6 +1005,7 @@ export default {
         }
       })
 
+    console.log('responseBling', responseBling)
     if (responseBling?.isError) {
       return res.status(500).json({ error: 'Erro ao atualizar o estoque' })
     }
