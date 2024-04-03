@@ -987,18 +987,28 @@ export default {
       Number(integrationId),
     )
 
-    const responseBling = await blingClient.updateStock({
-      produto: {
-        id: blingProductId,
-      },
-      deposito: {
-        id: warehouseId,
-      },
-      operacao: 'B',
-      quantidade: stock,
-      observacoes: `Estoque atualizado pelo WeDrop ${now.toLocaleString('pt-BR')}`,
-    })
+    const responseBling = await blingClient
+      .updateStock({
+        produto: {
+          id: blingProductId,
+        },
+        deposito: {
+          id: warehouseId,
+        },
+        operacao: 'B',
+        quantidade: stock,
+        observacoes: `Estoque atualizado pelo WeDrop ${now.toLocaleString('pt-BR')}`,
+      })
+      .catch((error) => {
+        return {
+          isError: true,
+          error,
+        }
+      })
 
+    if (responseBling?.isError) {
+      return res.status(500).json({ error: responseBling?.error })
+    }
     return res.json({ responseBling })
   },
 
