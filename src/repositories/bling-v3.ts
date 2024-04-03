@@ -33,6 +33,7 @@ export class BlingV3 {
     this.client.interceptors.response.use(
       (response: any) => response,
       async (error: any) => {
+        console.log('error status', error.response.status)
         if (error.response.status === 401) {
           return await this.updateToken()
             .then(async (data) => {
@@ -42,7 +43,7 @@ export class BlingV3 {
             .catch((error) => {
               return Promise.reject(error)
             })
-        } else if (error.response.status === 429) {
+        } /* else if (error.response.status === 429) {
           if (!error?.config?.headers?.retries) {
             error.config.headers.retries = 0
           }
@@ -56,7 +57,7 @@ export class BlingV3 {
           } else {
             return await Promise.reject(error)
           }
-        }
+        } */
         return await Promise.reject(error)
       },
     )
@@ -79,14 +80,9 @@ export class BlingV3 {
       idsProdutos: idsProdutos || undefined,
     }
     console.log('params', params)
-    return await this.client
-      .get('/produtos', { params })
-      .then((response) => {
-        return response.data
-      })
-      .catch(async (error: AxiosError) => {
-        await this.apiError(error)
-      })
+    return await this.client.get('/produtos', { params }).then((response) => {
+      return response.data
+    })
   }
 
   async getSellOrders({
@@ -205,13 +201,6 @@ export class BlingV3 {
         this.accessToken = response.data.access_token
         console.log('renovou o token')
         return response.data
-      })
-      .catch(async (error: AxiosError) => {
-        console.log('error on refresh token', error.response.data)
-        const returnError = error?.response?.data
-          ? error?.response?.data
-          : error
-        await this.apiError(returnError)
       })
   }
 
