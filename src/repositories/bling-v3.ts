@@ -206,6 +206,13 @@ export class BlingV3 {
         }
       },
     )
+    bling.interceptors.request.use(async (config) => {
+      console.log('[BLING V3] - ADDING TO QUEUE')
+      await blingRequestQueue.add(() => Promise.resolve())
+      console.log('[BLING V3] - QUEUE SIZE: ', blingRequestQueue.size)
+      console.log(`[BLING V3 ${this.integrationId}]  - REQUEST: ${config.url}`)
+      return config
+    })
     await blingRequestQueue.add(() => Promise.resolve())
     return await bling
       .postForm('/oauth/token', {
