@@ -25,9 +25,10 @@ export class BlingV3 {
     })
 
     this.client.interceptors.request.use(async (config) => {
+      console.log('[BLING V3] - ADDING TO QUEUE')
+      await blingRequestQueue.add(() => Promise.resolve())
       console.log('[BLING V3] - QUEUE SIZE: ', blingRequestQueue.size)
       console.log(`[BLING V3 ${this.integrationId}]  - REQUEST: ${config.url}`)
-      await blingRequestQueue.add(() => Promise.resolve())
       return config
     })
 
@@ -190,6 +191,7 @@ export class BlingV3 {
         Authorization: `Basic ${base64Auth.toString('base64')}}`,
       },
     })
+    await blingRequestQueue.add(() => Promise.resolve())
     return await bling
       .postForm('/oauth/token', {
         grant_type: 'refresh_token',
