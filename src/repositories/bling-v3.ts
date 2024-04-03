@@ -193,7 +193,7 @@ export class BlingV3 {
       },
     })
 
-    bling.interceptors.response.use(
+    /* bling.interceptors.response.use(
       (response) => response,
       async (error) => {
         if (error.response.status === 429) {
@@ -206,7 +206,7 @@ export class BlingV3 {
           return Promise.resolve(bling.request(error.config))
         }
       },
-    )
+    ) */
     bling.interceptors.request.use(async (config) => {
       console.log('[BLING V3 REFRESH TOKEN] - ADDING TO QUEUE')
       await blingRequestQueue.add(() => Promise.resolve())
