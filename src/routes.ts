@@ -3,6 +3,7 @@ import 'express-async-errors'
 import blingController from './controllers/blingController'
 import blingV3Controller from './controllers/blingV3Controller'
 import { ensureAuthenticateUser } from './middlewares/ensureAuthenticateUser'
+import rateLimitMiddleware, { rateLimiter } from './middlewares/rateLimiter'
 const routes = Router()
 
 routes.get('/', async (request: Request, response: Response) => {
@@ -26,7 +27,7 @@ routes.get('/', async (request: Request, response: Response) => {
   })
 })
 
-routes.post('/update', blingController.update)
+routes.post('/update', rateLimitMiddleware, blingController.update)
 routes.post('/v3-update', blingV3Controller.updateStock)
 routes.get(
   '/bling-v3/wedrop-products',
