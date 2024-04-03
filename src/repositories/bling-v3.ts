@@ -26,7 +26,7 @@ export class BlingV3 {
 
     this.client.interceptors.request.use(async (config) => {
       console.log('[BLING V3] - QUEUE SIZE: ', blingRequestQueue.size)
-      console.log('[BLING V3] - SENDING REQUEST ' + config.url)
+      console.log(`[BLING V3 ${this.integrationId}]  - REQUEST: ${config.url}`)
       await blingRequestQueue.add(() => Promise.resolve())
       return config
     })
@@ -36,16 +36,31 @@ export class BlingV3 {
       async (error: any) => {
         console.log('error status', error.response.status)
         if (error.response.status === 401) {
+          console.log(`[BLING V3 ${this.integrationId}] - REFRESHING TOKEN`)
           return await this.updateToken()
             .then(async (data) => {
+              console.log(`[BLING V3 ${this.integrationId}] - TOKEN REFRESHED`)
               error.config.headers.authorization = `Bearer ${data.access_token}`
+              this.client.defaults.headers.authorization = `Bearer ${data.access_token}`
+
               return Promise.resolve(this.client.request(error.config))
             })
             .catch((error) => {
+              console.log(
+                `[BLING V3 ${this.integrationId}] - ERROR ON REFRESHING TOKEN`,
+              )
               return Promise.reject(error)
             })
-        } /* else if (error.response.status === 429) {
-          if (!error?.config?.headers?.retries) {
+        } else if (error.response.status === 429) {
+          console.log(`[BLING V3 ${this.integrationId}] - RATE LIMIT EXCEEDED`)
+          console.log(
+            `[BLING V3 ${this.integrationId}] - ADDING TO RETRY QUEUE`,
+          )
+
+          await blingRequestQueue.add(() => Promise.resolve())
+          return Promise.resolve(this.client.request(error.config))
+
+          /* if (!error?.config?.headers?.retries) {
             error.config.headers.retries = 0
           }
           if (error.config.headers.retries < 5) {
@@ -57,8 +72,8 @@ export class BlingV3 {
             })
           } else {
             return await Promise.reject(error)
-          }
-        } */
+          } */
+        }
         return await Promise.reject(error)
       },
     )
