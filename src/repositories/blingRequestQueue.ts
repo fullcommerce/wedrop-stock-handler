@@ -1,6 +1,6 @@
 import PQueue from 'p-queue'
 export const blingRequestQueue = new PQueue({
-  interval: 2000,
-  intervalCap: 1,
+  interval: 1000,
+  intervalCap: 2,
   concurrency: 1,
 })
