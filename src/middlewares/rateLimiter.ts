@@ -1,6 +1,10 @@
 import PQueue from 'p-queue'
 import { Request, Response, NextFunction } from 'express'
-const requestQueue = new PQueue({ interval: 1000, intervalCap: 3 })
+const requestQueue = new PQueue({
+  interval: 1000,
+  intervalCap: 3,
+  concurrency: 1,
+})
 
 const rateLimitMiddleware = (
   req: Request,
