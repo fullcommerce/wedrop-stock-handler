@@ -241,7 +241,7 @@ export class BlingV3 {
         return response.data
       })
       .catch((error) => {
-        console.log('error on refresh token', error.response.data)
+        console.log('error on refresh token', error)
         return Promise.reject(error)
       })
   }
