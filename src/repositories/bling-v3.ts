@@ -46,10 +46,11 @@ export class BlingV3 {
 
               return Promise.resolve(this.client.request(error.config))
             })
-            .catch(() => {
+            .catch((error) => {
               console.log(
                 `[BLING V3 ${this.integrationId}] - ERROR ON REFRESHING TOKEN`,
               )
+              console.log(error)
               throw Error('Error on refreshing token')
             })
         } else if (error.response.status === 429) {
