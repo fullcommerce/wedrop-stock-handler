@@ -6,7 +6,7 @@ export const blingRequestQueue = new PQueue({
 })
 let count = 0
 
-blingRequestQueue.on('active', () => {
+blingRequestQueue.on('add', () => {
   console.log(
     `[BLING V3] Working on item #${++count}.  Size: ${blingRequestQueue.size}  Pending: ${blingRequestQueue.pending}`,
   )
