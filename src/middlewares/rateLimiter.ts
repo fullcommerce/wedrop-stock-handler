@@ -2,7 +2,7 @@ import PQueue from 'p-queue'
 import { Request, Response, NextFunction } from 'express'
 const requestQueue = new PQueue({
   interval: 1000,
-  intervalCap: 1,
+  intervalCap: 3,
   concurrency: 1,
 })
 
