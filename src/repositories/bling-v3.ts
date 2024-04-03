@@ -223,7 +223,7 @@ export class BlingV3 {
       return config
     })
     return await bling
-      .postForm('/oauth/token', {
+      .post('/oauth/token', {
         grant_type: 'refresh_token',
         refresh_token: this?.refreshToken?.trim(),
       })
