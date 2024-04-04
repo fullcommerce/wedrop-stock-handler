@@ -42,13 +42,15 @@ export default {
           status: 0,
         },
       })
-      return response.status(200).json({ erro: 'excedeu o espaço' })
+      return response
+        .status(200)
+        .json({ success: true, erro: 'excedeu o espaço' })
     }
 
     if (blingResponse?.erro) {
       return response.status(400).json(blingResponse)
     }
-    return response.json(blingResponse)
+    return response.json({ success: true, ...blingResponse })
 
     /* 
        const blingConnection = new Bling(apikey)
