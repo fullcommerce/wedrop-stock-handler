@@ -48,6 +48,34 @@ export default {
     }
 
     if (blingResponse?.erro) {
+      if (blingResponse.error?.retorno?.erros?.erro?.cod === 3) {
+        await prisma.integrations.update({
+          where: {
+            id: integration.id,
+          },
+          data: {
+            status: 0,
+          },
+        })
+        return response
+          .status(200)
+          .json({ success: true, erro: 'apikey inválida' })
+      }
+
+      if (blingResponse.error?.retorno?.erros?.erro?.cod === 16) {
+        await prisma.integrations.update({
+          where: {
+            id: integration.id,
+          },
+          data: {
+            status: 0,
+          },
+        })
+        return response
+          .status(200)
+          .json({ success: true, erro: 'conta inativa' })
+      }
+
       return response.status(400).json(blingResponse)
     }
     return response.json({ success: true, ...blingResponse })
