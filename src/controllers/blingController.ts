@@ -26,7 +26,9 @@ export default {
       return i.params.apikey === apikey
     })
     if (!integration) {
-      return response.status(400).json({ erro: 'apikey não encontrada' })
+      return response
+        .status(200)
+        .json({ success: true, erro: 'apikey não encontrada' })
     }
 
     const blingResponse = await blingConnection.updateStock({
