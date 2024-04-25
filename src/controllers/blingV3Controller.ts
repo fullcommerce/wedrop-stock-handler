@@ -911,6 +911,14 @@ export default {
       const isFlex = shipmentType === 'self_service'
       newOrderData.isflex = isFlex ? 1 : 0
       newOrderData.pickup_name = pickupName
+
+      if (isFlex) {
+        orderCosts.push({
+          cost: 'flex',
+          value: 12.99,
+        })
+        newOrderData.total_custo = totalCost + 12.99
+      }
     }
 
     const newOrder = await prisma.orders.create({
