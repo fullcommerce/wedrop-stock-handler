@@ -914,6 +914,7 @@ export default {
 
       if (isFlex) {
         orderCosts.push({
+          product_id: 2,
           cost: 'flex',
           value: 12.99,
         })
@@ -924,6 +925,7 @@ export default {
     const newOrder = await prisma.orders.create({
       data: newOrderData,
     })
+    console.log(newOrder)
 
     if (!newOrder?.id) {
       return res.status(400).json({ erro: newOrder })
@@ -938,8 +940,6 @@ export default {
       }),
     )
 
-    console.log('newOrderCosts', newOrderCosts)
-
     const transaction = await prisma
       .$transaction([
         prisma.order_products.createMany({
@@ -951,15 +951,11 @@ export default {
           }),
         }),
         prisma.order_costs.createMany({
-          data: orderCosts.map((costs) => {
-            return {
-              order_id: newOrder.id,
-              ...costs,
-            }
-          }),
+          data: newOrderCosts,
         }),
       ])
       .catch(async (error) => {
+        console.log(error)
         return await prisma.orders
           .delete({
             where: {
