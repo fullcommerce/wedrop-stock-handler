@@ -55,10 +55,10 @@ export class BlingV3 {
                 error.response.data,
               )
               const errorResponse = error.response.data?.error
-              console.log('ERROR TYPE', errorResponse.type)
+              console.log('ERROR TYPE', errorResponse?.type)
               if (
-                errorResponse.type.trim() === 'FORBIDDEN' ||
-                errorResponse.type.trim() === 'invalid_grant'
+                errorResponse?.type.trim() === 'FORBIDDEN' ||
+                errorResponse?.type.trim() === 'invalid_grant'
               ) {
                 console.log(
                   `[BLING V3 ${this.integrationId}] - DISABLING INTEGRATION`,
