@@ -582,9 +582,11 @@ export default {
     }
     const warehouse = await blingClient.getWarehouses().then((response) => {
       return response.data.find(
-        (warehouse) => warehouse.name === 'Geral' || warehouse.padrao === false,
+        (warehouse) => warehouse.name === 'Geral' || warehouse.padrao === true,
       )
     })
+
+    console.log(warehouse)
 
     const responseProduct = await blingClient
       .createProduct(productData)
