@@ -471,6 +471,55 @@ export default {
       params.refresh_token,
       Number(integrationId),
     )
+    const warehouse = await blingClient.getWarehouses().then((response) => {
+      return response.data.find(
+        (warehouse) => warehouse.name === 'Geral' || warehouse.padrao === true,
+      )
+    })
+
+    const dbProduct = await prisma.products.findFirst({
+      where: {
+        id: Number(productId),
+      },
+    })
+
+    const blingProductResult = await blingClient.getProducts({
+      codigo: dbProduct.sku,
+    })
+    if (blingProductResult.data.length > 0) {
+      const isBlingUserProductExists =
+        await prisma.bling_user_products.findFirst({
+          where: {
+            product_id: Number(productId),
+            integration_id: Number(integrationId),
+          },
+        })
+      if (!isBlingUserProductExists) {
+        await prisma.bling_user_products.create({
+          data: {
+            user_id: Number(userId),
+            integration_id: Number(integrationId),
+            product_id: Number(productId),
+            bling_product_id: blingProductResult.data[0].id,
+            bling_warehouse_id: warehouse.id,
+            status: 1,
+          },
+        })
+      } else {
+        await prisma.bling_user_products.update({
+          where: {
+            id: isBlingUserProductExists.id,
+          },
+          data: {
+            user_id: Number(userId),
+            bling_product_id: blingProductResult.data[0].id,
+            bling_warehouse_id: warehouse.id,
+          },
+        })
+      }
+
+      return res.status(200).json({ message: 'Produto já está no bling' })
+    }
 
     const isBlingUserProductExists = await prisma.bling_user_products.findFirst(
       {
@@ -560,11 +609,6 @@ export default {
         id: 1,
       },
     }
-    const warehouse = await blingClient.getWarehouses().then((response) => {
-      return response.data.find(
-        (warehouse) => warehouse.name === 'Geral' || warehouse.padrao === true,
-      )
-    })
 
     console.log(warehouse)
 
