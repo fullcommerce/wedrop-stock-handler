@@ -50,15 +50,7 @@ routes.post(
   '/bling-v3/add-product-to-store',
   blingV3Controller.addProductToStore,
 )
-routes.post(
-  '/bling-v3/send-variation',
-  ensureAuthenticateUser,
-  blingV3Controller.sendVariation,
-)
-routes.post(
-  '/bling-v3/send-kit',
-  ensureAuthenticateUser,
-  blingV3Controller.sendKit,
-)
+routes.post('/bling-v3/send-variation', blingV3Controller.sendVariation)
+routes.post('/bling-v3/send-kit', blingV3Controller.sendKit)
 routes.post('/bling-v3/find-product', blingV3Controller.findProduct)
 export default routes

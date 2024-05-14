@@ -151,13 +151,14 @@ export default {
   },
 
   async sendVariation(req: Request, res: Response) {
-    const { integrationId, variationId, userId } = req.body
+    const { integrationId, variationId } = req.body
 
     const integration = await prisma.integrations.findFirst({
       where: {
         id: Number(integrationId),
       },
     })
+    const userId = integration.user_id
     const params = JSON.parse(integration?.params)
     const blingClient = new BlingV3(
       params.access_token,
@@ -363,13 +364,14 @@ export default {
   },
 
   async sendKit(req: Request, res: Response) {
-    const { integrationId, kit, userId } = req.body
+    const { integrationId, kit } = req.body
 
     const integration = await prisma.integrations.findFirst({
       where: {
         id: Number(integrationId),
       },
     })
+    const userId = integration.user_id
     const params = JSON.parse(integration?.params)
     const blingClient = new BlingV3(
       params.access_token,
