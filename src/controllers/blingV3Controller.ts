@@ -457,13 +457,14 @@ export default {
   },
 
   async sendProduct(req: Request, res: Response) {
-    const { integrationId, productId, userId } = req.body
+    const { integrationId, productId } = req.body
 
     const integration = await prisma.integrations.findFirst({
       where: {
         id: Number(integrationId),
       },
     })
+    const userId = integration.user_id
     const params = JSON.parse(integration?.params)
     const blingClient = new BlingV3(
       params.access_token,
@@ -480,6 +481,7 @@ export default {
         },
       },
     )
+
     if (isBlingUserProductExists) {
       const responseBlingProduct = await blingClient.getProduct(
         isBlingUserProductExists.bling_product_id,
@@ -584,16 +586,18 @@ export default {
     }
 
     if (responseProduct.data?.id) {
-      await prisma.bling_user_products.create({
-        data: {
-          user_id: Number(userId),
-          integration_id: Number(integrationId),
-          product_id: Number(productId),
-          bling_product_id: responseProduct.data.id,
-          bling_warehouse_id: warehouse.id,
-          status: 1,
-        },
-      })
+      console.log(
+        await prisma.bling_user_products.create({
+          data: {
+            user_id: Number(userId),
+            integration_id: Number(integrationId),
+            product_id: Number(productId),
+            bling_product_id: responseProduct.data.id,
+            bling_warehouse_id: warehouse.id,
+            status: 1,
+          },
+        }),
+      )
 
       const stock = await blingClient.updateStock({
         produto: {
