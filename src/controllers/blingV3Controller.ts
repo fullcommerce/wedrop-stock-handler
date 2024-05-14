@@ -172,66 +172,41 @@ export default {
         user_id: Number(userId),
       },
       include: {
-        variation_products: true,
-      },
-    })
-
-    const blingUserProducts = await prisma.bling_user_products.findMany({
-      where: {
-        user_id: Number(userId),
-        integration_id: Number(integrationId),
-        product_id: {
-          in: dbVariation.variation_products.map(
-            (product) => product.product_id,
-          ),
+        variation_products: {
+          include: {
+            products: true,
+          },
         },
       },
-      include: {
-        products: true,
-      },
     })
-    const checkedBlingUserProducts = []
-
-    for (const product of blingUserProducts) {
-      const isBlingUserProductExists = await blingClient.getProduct(
-        product.bling_product_id,
-      )
-      if (
-        isBlingUserProductExists?.id === product.bling_product_id &&
-        isBlingUserProductExists?.situacao === 'A'
-      ) {
-        checkedBlingUserProducts.push(product)
-      } else {
-        await prisma.bling_user_products.delete({
-          where: {
-            id: product.id,
-          },
-        })
-      }
-    }
-    const filteredBlingUserProducts: any =
-      checkedBlingUserProducts.filter(Boolean)
-
-    const variationWithProducts: any = dbVariation.variation_products.map(
-      (variationProduct) => {
-        const product = filteredBlingUserProducts.find(
-          (blingUserProduct) =>
-            blingUserProduct.product_id === variationProduct.product_id,
-        )
-        return {
-          ...variationProduct,
-          bling_product_id: product?.bling_product_id,
-          bling_warehouse_id: product?.bling_warehouse_id,
-          product: product?.products,
-        }
-      },
-    )
 
     const variation = {
       ...dbVariation,
-      variation_products: variationWithProducts,
+      variation_products: [],
     }
-    console.log(variation)
+    const warehouse = await blingClient.getWarehouses().then((response) => {
+      return response.data.find(
+        (warehouse) => warehouse.name === 'Geral' || warehouse.padrao === true,
+      )
+    })
+    for (const variationProduct of dbVariation.variation_products) {
+      const blingProduct = await blingClient.getProducts({
+        codigo: variationProduct.products.sku,
+      })
+      if (blingProduct.data.length === 0) {
+        console.log('blingProduct not found', variationProduct.products.sku)
+        return false
+      }
+      const productResult = blingProduct?.data[0]
+      const product = await blingClient.getProduct(productResult.id)
+
+      variation.variation_products.push({
+        ...variationProduct,
+        bling_product_id: product.id,
+        bling_warehouse_id: warehouse.id,
+        product: variationProduct.products,
+      })
+    }
 
     const productData = {
       nome: variation.name,
@@ -240,7 +215,8 @@ export default {
       tipo: 'P',
       situacao: 'A',
       formato: 'V',
-      descricaoCurta: variation?.variation_products[0]?.product.description,
+      descricaoCurta:
+        variation?.variation_products[0]?.product?.description || null,
       dataValidade: undefined,
       unidade: 'UN',
       pesoLiquido: variation?.variation_products[0]?.product.weight,
@@ -632,7 +608,12 @@ export default {
         quantidade: product.stock,
         observacoes: 'Estoque inicial by WeDrop',
       })
-      return res.json({ product: responseProduct.data, stock, productData })
+      return res.json({
+        product: responseProduct.data,
+        stock,
+        productData,
+        integrationId,
+      })
     }
     return res.status(400).json({ responseProduct, productData })
   },
