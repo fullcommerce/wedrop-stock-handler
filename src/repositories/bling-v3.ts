@@ -36,6 +36,7 @@ export class BlingV3 {
       (response: any) => response,
       async (error: any) => {
         console.log('error status', error.response.status)
+        console.log('error response', error.response.data)
         if (error.response.status === 401) {
           console.log(`[BLING V3 ${this.integrationId}] - REFRESHING TOKEN`)
           return await this.updateToken()
@@ -46,44 +47,14 @@ export class BlingV3 {
 
               return Promise.resolve(this.client.request(error.config))
             })
-            .catch(async (error) => {
-              console.log(
-                `[BLING V3 ${this.integrationId}] - ERROR ON REFRESHING TOKEN`,
-              )
-              console.log(
-                `[BLING V3 ${this.integrationId}] - ERROR RESPONSE`,
-                error.response.data,
-              )
-              const errorResponse = error.response.data?.error
-              console.log('ERROR TYPE', errorResponse?.type)
-              if (
-                errorResponse?.type.trim() === 'FORBIDDEN' ||
-                errorResponse?.type.trim() === 'invalid_grant'
-              ) {
-                console.log(
-                  `[BLING V3 ${this.integrationId}] - DISABLING INTEGRATION`,
-                )
-                await prisma.integrations.update({
-                  where: {
-                    id: this.integrationId,
-                  },
+            .catch(async () => {
+              return Promise.resolve(() => {
+                return {
                   data: {
-                    status: 0,
+                    error: 'Integração desativada por erro na configuração',
                   },
-                })
-                console.log(
-                  `[BLING V3 ${this.integrationId}] - INTEGRATION DISABLED`,
-                )
-                return Promise.resolve(() => {
-                  return {
-                    data: {
-                      error: 'Integração desativada por erro na configuração',
-                    },
-                  }
-                })
-              }
-
-              throw Error('Error on refreshing token')
+                }
+              })
             })
         } else if (error.response.status === 429) {
           console.log(`[BLING V3 ${this.integrationId}] - RATE LIMIT EXCEEDED`)
@@ -171,11 +142,11 @@ export class BlingV3 {
     }
     console.log('params', params)
 
-    return await this.client
-      .get('/pedidos/vendas', { params })
-      .then((response) => {
+    return (
+      (await this.client.get('/pedidos/vendas', { params }).then((response) => {
         return response.data
-      })
+      })) || { data: [] }
+    )
   }
 
   async createProduct(data: any) {
@@ -225,6 +196,15 @@ export class BlingV3 {
       },
     })
     if (!this.refreshToken || this.refreshToken === '') {
+      console.log('Refresh token not found')
+      await prisma.integrations.update({
+        where: {
+          id: this.integrationId,
+        },
+        data: {
+          status: 0,
+        },
+      })
       throw Error('Refresh token not found')
     }
 
@@ -260,6 +240,7 @@ export class BlingV3 {
         refresh_token: this?.refreshToken?.trim(),
       })
       .then(async (response) => {
+        console.log('response', response)
         await prisma.integrations.update({
           where: {
             id: this.integrationId,
@@ -280,6 +261,7 @@ export class BlingV3 {
           `[BLING V3 REFRESH TOKEN ${this.integrationId}] ERROR ON REFRESH TOKEN`,
           error?.response?.data,
         )
+        console.log(error?.response)
         await prisma.integrations.update({
           where: {
             id: this.integrationId,
