@@ -224,6 +224,9 @@ export class BlingV3 {
         Authorization: `Basic ${base64Auth.toString('base64')}}`,
       },
     })
+    if (!this.refreshToken || this.refreshToken === '') {
+      throw Error('Refresh token not found')
+    }
 
     /* bling.interceptors.response.use(
       (response) => response,
@@ -272,12 +275,20 @@ export class BlingV3 {
         this.accessToken = response.data.access_token
         return response.data
       })
-      .catch((error) => {
-        /* console.log(
+      .catch(async (error) => {
+        console.log(
           `[BLING V3 REFRESH TOKEN ${this.integrationId}] ERROR ON REFRESH TOKEN`,
-          error,
-        ) */
-        return Promise.reject(error)
+          error?.response?.data,
+        )
+        await prisma.integrations.update({
+          where: {
+            id: this.integrationId,
+          },
+          data: {
+            status: 0,
+          },
+        })
+        throw Error('Error on refreshing token')
       })
   }
 

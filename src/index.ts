@@ -3,6 +3,8 @@ import 'express-async-errors'
 import routes from './routes'
 import { config } from 'dotenv'
 import cors from 'cors'
+import { prisma } from './database/prismaClient'
+import { BlingV3 } from './repositories/bling-v3'
 config()
 const app = express()
 app.use(cors())
@@ -43,3 +45,38 @@ app.listen(process.env.PORT, () => {
   )
   console.log('Press Ctrl+C to quit!!!!!')
 })
+
+async function updateAllTokens() {
+  const integrations = await prisma.integrations.findMany({
+    where: {
+      keyword: 'blingv3',
+      status: 1,
+    },
+    orderBy: {
+      id: 'desc',
+    },
+  })
+  console.log(`${integrations.length} integrações no total`)
+  let i = 0
+  for (const integration of integrations) {
+    const params = JSON.parse(integration?.params)
+    if (!params?.access_token || !params?.refresh_token) {
+      console.log('No tokens found for integration', integration.id)
+      continue
+    }
+    const blingClient = new BlingV3(
+      params.access_token,
+      params.refresh_token,
+      Number(integration.id),
+    )
+
+    await blingClient.updateToken().catch()
+    i++
+    console.log(`Token ${i} of ${integrations.length} updated`)
+    // wait random between 5 and 10 seconds
+    await new Promise((resolve) =>
+      setTimeout(resolve, Math.floor(Math.random() * 1000) + 1000),
+    )
+  }
+}
+// updateAllTokens()
