@@ -248,7 +248,7 @@ export class BlingV3 {
         refresh_token: this?.refreshToken?.trim(),
       })
       .then(async (response) => {
-        console.log('response', response)
+        console.log('response', response.data)
         await prisma.integrations.update({
           where: {
             id: this.integrationId,
@@ -269,7 +269,7 @@ export class BlingV3 {
           `[BLING V3 REFRESH TOKEN ${this.integrationId}] ERROR ON REFRESH TOKEN`,
           error?.response?.data,
         )
-        console.log(error?.response)
+        console.log(error?.response.data)
         await prisma.integrations.update({
           where: {
             id: this.integrationId,
