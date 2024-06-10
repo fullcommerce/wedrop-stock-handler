@@ -1079,6 +1079,9 @@ export default {
     if (!responseBling) {
       return res.status(500).json({ error: 'Erro ao atualizar o estoque' })
     }
+    if (!responseBling?.data?.id) {
+      return res.status(500).json({ error: 'Erro ao atualizar o estoque' })
+    }
     return res.json({ responseBling })
   },
 
