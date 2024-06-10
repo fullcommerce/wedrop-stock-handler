@@ -1018,9 +1018,9 @@ export default {
       },
     })
 
-    if (integration?.status === 0) {
+    /* if (integration?.status === 0) {
       return res.status(400).json({ error: 'Integração desativada' })
-    }
+    } */
 
     const params = JSON.parse(integration?.params || '{}')
     if (!params.access_token || !params.refresh_token) {
