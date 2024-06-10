@@ -1059,8 +1059,21 @@ export default {
         }
       })
 
-    console.log('responseBling', responseBling)
     if (responseBling?.isError) {
+      const unExists = responseBling.error.error.fields.find((item) => {
+        return item.msg === 'Produto inexistente selecionado.'
+      })
+      if (unExists) {
+        await prisma.bling_user_products.deleteMany({
+          where: {
+            bling_product_id: blingProductId,
+          },
+        })
+        return res.json({
+          message: 'Produto não encontrado no Bling, já removido da fila',
+        })
+      }
+
       return res.status(500).json({ error: 'Erro ao atualizar o estoque' })
     }
     if (!responseBling) {
