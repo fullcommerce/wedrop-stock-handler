@@ -191,6 +191,20 @@ export class BlingV3 {
     })
     if (!this.refreshToken || this.refreshToken === '') {
       console.log('Refresh token not found')
+      const isIntegrationExists = await prisma.integrations.findFirst({
+        where: {
+          id: this.integrationId,
+        },
+      })
+      if (!isIntegrationExists) {
+        await prisma.user_stock_result.create({
+          data: {
+            integration_id: this.integrationId,
+            created_at: now,
+            result: 'INTEGRATION_NOT_FOUND',
+          },
+        })
+      }
 
       await prisma.user_stock_result.create({
         data: {
