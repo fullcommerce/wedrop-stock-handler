@@ -35,8 +35,6 @@ export class BlingV3 {
     this.client.interceptors.response.use(
       (response: any) => response,
       async (error: any) => {
-        console.log('error status', error.response.status)
-        console.log('error response', error.response.data)
         if (error.response.status === 401) {
           console.log(`[BLING V3 ${this.integrationId}] - REFRESHING TOKEN`)
           return await this.updateToken()
@@ -64,20 +62,6 @@ export class BlingV3 {
 
           await blingRequestQueue.add(() => Promise.resolve())
           return Promise.resolve(this.client.request(error.config))
-
-          /* if (!error?.config?.headers?.retries) {
-            error.config.headers.retries = 0
-          }
-          if (error.config.headers.retries < 5) {
-            error.config.headers.retries = error.config.headers.retries + 1
-            return await new Promise((resolve) => {
-              setTimeout(() => {
-                resolve(this.client.request(error.config))
-              }, 1000 * error.config.headers.retries)
-            })
-          } else {
-            return await Promise.reject(error)
-          } */
         }
         return await Promise.reject(error)
       },
@@ -192,6 +176,8 @@ export class BlingV3 {
   }
 
   async updateToken() {
+    const now = new Date()
+    now.setHours(now.getHours() - 3)
     const base64Auth = Buffer.from(
       `${process.env.BLING_CLIENTID}:${process.env.BLING_CLIENTSECRET}`,
     )
@@ -205,6 +191,14 @@ export class BlingV3 {
     })
     if (!this.refreshToken || this.refreshToken === '') {
       console.log('Refresh token not found')
+
+      await prisma.user_stock_result.create({
+        data: {
+          integration_id: this.integrationId,
+          created_at: now,
+          result: 'REFRESH_TOKEN_NOT_FOUND',
+        },
+      })
       await prisma.integrations.update({
         where: {
           id: this.integrationId,
@@ -270,6 +264,14 @@ export class BlingV3 {
           error?.response?.data,
         )
         console.log(error?.response.data)
+        await prisma.user_stock_result.create({
+          data: {
+            integration_id: this.integrationId,
+            created_at: now,
+            params: JSON.stringify(error?.response?.data),
+            result: 'ERROR_ON_REFRESH_TOKEN',
+          },
+        })
         await prisma.integrations.update({
           where: {
             id: this.integrationId,
