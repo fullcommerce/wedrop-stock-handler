@@ -204,6 +204,8 @@ export class BlingV3 {
             result: 'INTEGRATION_NOT_FOUND',
           },
         })
+
+        return false
       }
 
       await prisma.user_stock_result.create({
