@@ -284,7 +284,13 @@ export class BlingV3 {
           data: {
             integration_id: this.integrationId,
             created_at: now,
-            params: JSON.stringify(error?.response?.data),
+            params: JSON.stringify({
+              paramsUsed: {
+                grant_type: 'refresh_token',
+                refresh_token: this?.refreshToken?.trim(),
+              },
+              ...error?.response?.data,
+            }),
             result: 'ERROR_ON_REFRESH_TOKEN',
           },
         })
