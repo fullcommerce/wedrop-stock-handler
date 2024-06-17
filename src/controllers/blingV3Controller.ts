@@ -1008,7 +1008,7 @@ export default {
         id: newOrder.id,
       },
     })
-    if (verifyOrder.total_custo === 0) {
+    if (verifyOrder.total_custo === 0 || orderProducts.length === 0) {
       await prisma.orders.update({
         where: {
           id: newOrder.id,
