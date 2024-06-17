@@ -80,29 +80,3 @@ async function updateAllTokens() {
   }
 }
 // updateAllTokens()
-
-prisma.products
-  .findMany({
-    where: {
-      stock: {
-        gt: 0,
-      },
-    },
-  })
-  .then(async (products) => {
-    const newStockQueueData = products.map((product) => {
-      return {
-        product_id: product.id,
-        sku: product.sku,
-        stock: product.stock,
-        suplier_id: 0,
-        status: 0,
-      }
-    })
-    console.log(
-      await prisma.stock_queue.createMany({
-        data: newStockQueueData,
-        skipDuplicates: true,
-      }),
-    )
-  })

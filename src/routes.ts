@@ -29,11 +29,7 @@ routes.get('/', async (request: Request, response: Response) => {
 
 routes.post('/update', rateLimitMiddleware, blingController.update)
 routes.post('/v3-update', blingV3Controller.updateStock)
-routes.get(
-  '/bling-v3/wedrop-products',
-  ensureAuthenticateUser,
-  blingV3Controller.getWeDropProducts,
-)
+routes.get('/bling-v3/wedrop-products', blingV3Controller.getWeDropProducts)
 
 routes.get('/bling-v3/find-new-orders', blingV3Controller.findNewOrders)
 routes.get('/bling-v3/import-order', blingV3Controller.importOrder)

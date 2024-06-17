@@ -6,14 +6,12 @@ import { Order } from '../models/Order'
 export default {
   async getWeDropProducts(req: Request, res: Response) {
     const { integrationId } = req.query
-    const { userId } = req.body
 
     const weDropProducts = await prisma.products.findMany()
 
     const integration = await prisma.integrations.findFirst({
       where: {
         id: Number(integrationId),
-        user_id: Number(userId),
       },
     })
     const params = JSON.parse(integration?.params)
@@ -54,7 +52,7 @@ export default {
       )
 
       return {
-        user_id: Number(userId),
+        user_id: integration.user_id,
         integration_id: Number(integrationId),
         product_id: weDropProduct.id,
         bling_product_id: product.id * 1,
@@ -65,7 +63,7 @@ export default {
 
     await prisma.bling_user_products.deleteMany({
       where: {
-        user_id: Number(userId),
+        user_id: integration.user_id,
       },
     })
 
@@ -1004,6 +1002,22 @@ export default {
             }
           })
       })
+
+    const verifyOrder = await prisma.orders.findFirst({
+      where: {
+        id: newOrder.id,
+      },
+    })
+    if (verifyOrder.total_custo === 0) {
+      await prisma.orders.update({
+        where: {
+          id: newOrder.id,
+        },
+        data: {
+          status: 9,
+        },
+      })
+    }
 
     return res.json({ ...newOrder, transaction })
   },
