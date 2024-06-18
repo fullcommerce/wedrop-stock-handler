@@ -269,6 +269,7 @@ export class BlingV3 {
               refresh_token: response.data.refresh_token,
             }),
             update_date: now,
+            status: 1,
           },
         })
         this.refreshToken = response.data.refresh_token
