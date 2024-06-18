@@ -32,7 +32,7 @@ export class BlingV3 {
       return config
     })
 
-    this.client.interceptors.response.use(
+    /* this.client.interceptors.response.use(
       (response: any) => response,
       async (error: any) => {
         if (error.response.status === 401) {
@@ -65,7 +65,7 @@ export class BlingV3 {
         }
         return await Promise.reject(error)
       },
-    )
+    ) */
   }
 
   async getProducts({
