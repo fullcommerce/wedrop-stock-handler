@@ -47,10 +47,17 @@ app.listen(process.env.PORT, () => {
 })
 
 async function updateAllTokens() {
+  const now = new Date()
+  now.setHours(now.getHours() - 3)
+  const twohoursbefore = new Date(now)
+  twohoursbefore.setHours(twohoursbefore.getHours() - 2)
+
   const integrations = await prisma.integrations.findMany({
     where: {
       keyword: 'blingv3',
-      status: 1,
+      update_date: {
+        lte: twohoursbefore,
+      },
     },
     orderBy: {
       id: 'desc',
@@ -75,8 +82,8 @@ async function updateAllTokens() {
     console.log(`Token ${i} of ${integrations.length} updated`)
     // wait random between 5 and 10 seconds
     await new Promise((resolve) =>
-      setTimeout(resolve, Math.floor(Math.random() * 1000) + 1000),
+      setTimeout(resolve, Math.floor(Math.random() * 5000) + 1000),
     )
   }
 }
-// updateAllTokens()
+updateAllTokens()
