@@ -79,6 +79,16 @@ async function updateAllTokens() {
     const params = JSON.parse(realIntegration?.params)
     if (!params?.access_token || !params?.refresh_token) {
       console.log('No tokens found for integration', integration.id)
+      await prisma.integrations.update({
+        where: {
+          id: integration.id,
+        },
+        data: {
+          status: 0,
+        },
+      })
+      i++
+      console.log(`Token ${i} of ${integrations.length} updated`)
       continue
     }
     const blingClient = new BlingV3(
