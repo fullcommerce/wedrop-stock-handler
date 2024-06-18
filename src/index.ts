@@ -77,7 +77,9 @@ async function updateAllTokens() {
       Number(integration.id),
     )
 
-    await blingClient.updateToken().catch()
+    await blingClient.updateToken().catch(() => {
+      console.log('Error updating token')
+    })
     i++
     console.log(`Token ${i} of ${integrations.length} updated`)
     // wait random between 5 and 10 seconds
