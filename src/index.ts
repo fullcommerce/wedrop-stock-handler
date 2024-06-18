@@ -63,7 +63,7 @@ async function updateAllTokens() {
       },
     },
     orderBy: {
-      id: 'desc',
+      update_date: 'asc',
     },
   })
   console.log(`${integrations.length} integrações no total`)
