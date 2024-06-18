@@ -53,7 +53,7 @@ async function updateAllTokens() {
   const now = new Date()
   now.setHours(now.getHours() - 3)
   const twohoursbefore = new Date(now)
-  twohoursbefore.setHours(twohoursbefore.getHours() - 1)
+  twohoursbefore.setHours(twohoursbefore.getHours() - 2)
 
   const integrations = await prisma.integrations.findMany({
     where: {
