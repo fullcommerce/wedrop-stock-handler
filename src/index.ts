@@ -69,7 +69,13 @@ async function updateAllTokens() {
   console.log(`${integrations.length} integrações no total`)
   let i = 0
   for (const integration of integrations) {
-    const params = JSON.parse(integration?.params)
+    const realIntegration = await prisma.integrations.findUnique({
+      where: {
+        id: integration.id,
+      },
+    })
+
+    const params = JSON.parse(realIntegration?.params)
     if (!params?.access_token || !params?.refresh_token) {
       console.log('No tokens found for integration', integration.id)
       continue
