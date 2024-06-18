@@ -61,6 +61,7 @@ async function updateAllTokens() {
       update_date: {
         lte: twohoursbefore,
       },
+      status: 1,
     },
     orderBy: {
       update_date: 'asc',
