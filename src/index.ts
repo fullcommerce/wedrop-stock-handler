@@ -93,7 +93,7 @@ async function updateAllTokens() {
     console.log(`Token ${i} of ${integrations.length} updated`)
     // wait random between 5 and 10 seconds
     await new Promise((resolve) =>
-      setTimeout(resolve, Math.floor(Math.random() * 5000) + 1000),
+      setTimeout(resolve, Math.floor(Math.random() * 3000) + 1000),
     )
   }
   isUpdatingTokens = false
