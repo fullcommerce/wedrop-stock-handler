@@ -696,6 +696,24 @@ export default {
         return res.data
       })
 
+    if (!blingOrder) {
+      return res.status(400).json({ message: 'Order not found' })
+    }
+
+    const isOrderExists = await prisma.orders.findFirst({
+      where: {
+        channel_order: String(
+          blingOrder.numeroLoja ? blingOrder.numeroLoja : blingOrder.numero,
+        ),
+      },
+      select: {
+        id: true,
+      },
+    })
+
+    if (isOrderExists) {
+      return res.status(400).json({ message: 'Order already exists' })
+    }
     const customer = {
       nome: blingOrder?.contato?.nome,
       cnpj: blingOrder?.contato?.numeroDocumento,
