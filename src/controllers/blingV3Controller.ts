@@ -111,12 +111,12 @@ export default {
         // situations: [6, 15],
         page: i,
       })
+      if (responseOrders.data.length === 0) {
+        break
+      }
       responseOrders.data.forEach((order: any) => {
         orders.push(order)
       })
-      if (responseOrders.data.length < 100) {
-        break
-      }
     }
     const userOrders = await prisma.orders.findMany({
       where: {
