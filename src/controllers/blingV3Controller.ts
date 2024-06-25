@@ -108,7 +108,7 @@ export default {
       const responseOrders = await blingClient.getSellOrders({
         initDate,
         endDate: stopDate,
-        situations: [6, 15],
+        situations: [9, 6, 15],
         page: i,
       })
       if (responseOrders.data.length === 0) {
