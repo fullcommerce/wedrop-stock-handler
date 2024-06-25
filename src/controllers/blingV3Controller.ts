@@ -666,6 +666,8 @@ export default {
 
   async importOrder(req: Request, res: Response) {
     const { erpId, integrationId, blingId } = req.query
+    const now = new Date()
+    now.setHours(now.getHours() - 3)
     const erp = await prisma.integrations.findFirst({
       where: {
         id: Number(erpId),
@@ -805,6 +807,7 @@ export default {
       customer_name: JSON.stringify(customer),
       status: 0,
       isflex: 0,
+      insert_date: now,
     }
     const orderProducts = []
     const orderCosts = []
