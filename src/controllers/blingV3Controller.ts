@@ -778,6 +778,18 @@ export default {
         keyword: 'vtex',
       },
       {
+        name: 'Shein',
+        keyword: 'shein',
+      },
+      {
+        name: 'Kwai',
+        keyword: 'kwai',
+      },
+      {
+        name: 'Olist',
+        keyword: 'olist',
+      },
+      {
         name: 'Outro',
         keyword: 'outro',
       },
