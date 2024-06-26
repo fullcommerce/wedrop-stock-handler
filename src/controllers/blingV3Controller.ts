@@ -124,10 +124,8 @@ export default {
         channel_order: {
           in: orders.map((order) =>
             String(
-              order.numeroLoja !== ''
-                ? order.numeroLoja.trim()
-                : order.numero.trim(),
-            ),
+              order.numeroLoja !== '' ? order.numeroLoja : order.numero,
+            ).trim(),
           ),
         },
       },
