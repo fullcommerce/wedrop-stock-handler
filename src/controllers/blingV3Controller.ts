@@ -123,7 +123,11 @@ export default {
         user_id: Number(userId),
         channel_order: {
           in: orders.map((order) =>
-            String(order.numeroLoja !== '' ? order.numeroLoja : order.numero),
+            String(
+              order.numeroLoja !== ''
+                ? order.numeroLoja.trim()
+                : order.numero.trim(),
+            ),
           ),
         },
       },
