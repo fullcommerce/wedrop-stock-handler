@@ -5,6 +5,7 @@ import { config } from 'dotenv'
 import cors from 'cors'
 import { prisma } from './database/prismaClient'
 import { BlingV3 } from './repositories/bling-v3'
+import { verifyOrders } from './verifyNotInformedChannelsOrders'
 config()
 const app = express()
 app.use(cors())
@@ -45,3 +46,4 @@ app.listen(process.env.PORT, () => {
   )
   console.log('Press Ctrl+C to quit!!!!!')
 })
+setInterval(verifyOrders, 1000)

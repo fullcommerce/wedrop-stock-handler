@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { prisma } from '../database/prismaClient'
 import { BlingV3 } from '../repositories/bling-v3'
 import { Order } from '../models/Order'
+import { integrationsNames } from '../integrationsNames'
 
 export default {
   async getWeDropProducts(req: Request, res: Response) {
@@ -736,73 +737,6 @@ export default {
       celular: '',
       fone: '',
     }
-
-    const integrationsNames = [
-      {
-        name: 'Shopee',
-        keyword: 'shopee',
-      },
-      {
-        name: 'MercadoLivre',
-        keyword: 'mercadolivre',
-      },
-      {
-        name: 'Americanas',
-        keyword: 'americanas',
-      },
-      {
-        name: 'Aliexpress',
-        keyword: 'aliexpress',
-      },
-      {
-        name: 'Magalu',
-        keyword: 'magalu',
-      },
-      {
-        name: 'Amazon',
-        keyword: 'amazon',
-      },
-      {
-        name: 'ViaVarejo',
-        keyword: 'viavarejo',
-      },
-      {
-        name: 'Shopify',
-        keyword: 'shopify',
-      },
-      {
-        name: 'Nuvemshop',
-        keyword: 'nuvemshop',
-      },
-      {
-        name: 'Vtex',
-        keyword: 'vtex',
-      },
-      {
-        name: 'Shein',
-        keyword: 'shein',
-      },
-      {
-        name: 'Kwai',
-        keyword: 'kwai',
-      },
-      {
-        name: 'Olist',
-        keyword: 'olist',
-      },
-      {
-        name: 'Outro',
-        keyword: 'outro',
-      },
-      {
-        name: 'Outra Plataforma',
-        keyword: 'outraplataforma',
-      },
-      {
-        name: 'Outro marketplace',
-        keyword: 'outromarketplace',
-      },
-    ]
 
     const newOrderData = {
       user_id: erp.user_id,
