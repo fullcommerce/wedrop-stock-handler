@@ -709,6 +709,7 @@ export default {
         channel_order: String(
           blingOrder.numeroLoja ? blingOrder.numeroLoja : blingOrder.numero,
         ),
+        user_id: erp.user_id,
       },
       select: {
         id: true,
