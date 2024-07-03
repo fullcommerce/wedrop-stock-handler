@@ -3,8 +3,6 @@ import 'express-async-errors'
 import routes from './routes'
 import { config } from 'dotenv'
 import cors from 'cors'
-import { prisma } from './database/prismaClient'
-import { BlingV3 } from './repositories/bling-v3'
 import { verifyOrders } from './verifyNotInformedChannelsOrders'
 config()
 const app = express()
