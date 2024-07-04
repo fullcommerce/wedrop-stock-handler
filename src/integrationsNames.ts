@@ -63,4 +63,12 @@ export const integrationsNames = [
     name: 'Outro marketplace',
     keyword: 'outromarketplace',
   },
+  {
+    name: 'Carrefour',
+    keyword: 'carrefour',
+  },
+  {
+    name: 'Loja Integrada',
+    keyword: 'lojaintegrada',
+  },
 ]
