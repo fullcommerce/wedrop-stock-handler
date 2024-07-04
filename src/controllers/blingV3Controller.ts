@@ -1058,7 +1058,9 @@ export default {
         })
       }
 
-      return res.status(500).json({ error: 'Erro ao atualizar o estoque' })
+      return res
+        .status(500)
+        .json({ error: 'Erro ao atualizar o estoque', responseBling })
     }
     if (!responseBling) {
       return res.status(500).json({ error: 'Erro ao atualizar o estoque' })
@@ -1066,7 +1068,7 @@ export default {
     if (!responseBling?.data?.id) {
       return res.status(500).json({ error: 'Erro ao atualizar o estoque' })
     }
-    return res.json({ responseBling })
+    return res.json({ ...responseBling })
   },
 
   async getProduct(req: Request, res: Response) {
