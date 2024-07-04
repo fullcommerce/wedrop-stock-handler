@@ -65,6 +65,7 @@ export default {
     await prisma.bling_user_products.deleteMany({
       where: {
         user_id: integration.user_id,
+        integration_id: Number(integrationId),
       },
     })
 
