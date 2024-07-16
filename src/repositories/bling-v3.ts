@@ -127,9 +127,15 @@ export class BlingV3 {
     console.log('params', params)
 
     return (
-      (await this.client.get('/pedidos/vendas', { params }).then((response) => {
-        return response.data
-      })) || { data: [] }
+      (await this.client
+        .get('/pedidos/vendas', { params })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          console.log(error.response.data)
+          return error.response.data
+        })) || { data: [] }
     )
   }
 

@@ -44,7 +44,10 @@ export default {
       ),
     )
     const warehouse = await blingClient.getWarehouses().then((response) => {
-      return response.data[0]
+      const geral = response.data.find((warehouse) =>
+        warehouse.descricao.includes('Geral'),
+      )
+      return geral || response.data[0]
     })
 
     const formattedProductsToDb = filtredProducts.map((product: any) => {

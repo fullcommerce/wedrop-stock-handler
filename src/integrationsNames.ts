@@ -71,4 +71,8 @@ export const integrationsNames = [
     name: 'Loja Integrada',
     keyword: 'lojaintegrada',
   },
+  {
+    name: 'Woocommerce',
+    keyword: 'woocommerce',
+  },
 ]
