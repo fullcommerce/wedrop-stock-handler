@@ -141,8 +141,9 @@ export default {
           )
         }),
     )
+    filtredOrders.push({ responseOrders: orders })
 
-    return res.json({ ...filtredOrders, responseOrders: orders })
+    return res.json(filtredOrders)
   },
 
   async sendVariation(req: Request, res: Response) {
