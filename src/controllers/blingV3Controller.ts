@@ -104,13 +104,14 @@ export default {
     )
     const orders = []
 
-    for (let i = 1; i < 10; i++) {
+    for (let i = 1; i < 20; i++) {
       const responseOrders = await blingClient.getSellOrders({
         initDate,
         endDate: stopDate,
         // situations: [6, 15],
         page: i,
       })
+      console.log(responseOrders.length + ' Pedidos')
       responseOrders.data.forEach((order: any) => {
         orders.push(order)
       })
@@ -141,7 +142,7 @@ export default {
           )
         }),
     )
-    filtredOrders.push({ responseOrders: orders })
+    filtredOrders.push({ rp: orders })
 
     return res.json(filtredOrders)
   },
