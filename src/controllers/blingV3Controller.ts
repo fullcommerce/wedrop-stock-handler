@@ -142,7 +142,7 @@ export default {
         }),
     )
 
-    return res.json(filtredOrders)
+    return res.json({ ...filtredOrders, responseOrders: orders })
   },
 
   async sendVariation(req: Request, res: Response) {
