@@ -114,7 +114,7 @@ export default {
       responseOrders.data.forEach((order: any) => {
         orders.push(order)
       })
-      if (responseOrders.data.length < 100) {
+      if (responseOrders.data.length === 0) {
         break
       }
     }
