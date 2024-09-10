@@ -114,9 +114,6 @@ export default {
       responseOrders.data.forEach((order: any) => {
         orders.push(order)
       })
-      if (responseOrders.data.length === 0) {
-        break
-      }
     }
     const userOrders = await prisma.orders.findMany({
       where: {
