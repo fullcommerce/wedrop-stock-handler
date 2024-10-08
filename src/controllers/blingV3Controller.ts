@@ -109,7 +109,7 @@ export default {
     )
     const orders = []
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 3; i++) {
       const responseOrders = await blingClient.getSellOrders({
         initDate,
         endDate: stopDate,
@@ -693,6 +693,7 @@ export default {
         id: Number(integrationId),
       },
     })
+
     const blingClient = new BlingV3(
       params.access_token,
       params.refresh_token,
@@ -927,6 +928,13 @@ export default {
         })
         newOrderData.total_custo = totalCost + 12.99
       }
+    }
+    if (integration.keyword === 'amazon') {
+      const integrationParams = JSON.parse(integration.params)
+      const pickupName = integrationParams.logisticMode
+        ? integrationParams.logisticMode
+        : 'Amazon'
+      newOrderData.pickup_name = pickupName
     }
 
     const newOrder = await prisma.orders.create({
