@@ -57,7 +57,7 @@ export const integrationsNames = [
   },
   {
     name: 'Outra Plataforma',
-    keyword: 'outraplatforma',
+    keyword: 'outraplataforma',
   },
   {
     name: 'Outro marketplace',
