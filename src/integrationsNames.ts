@@ -60,6 +60,10 @@ export const integrationsNames = [
     keyword: 'outraplataforma',
   },
   {
+    name: 'Outra Plataforma',
+    keyword: 'outraplatforma',
+  },
+  {
     name: 'Outro marketplace',
     keyword: 'outromarketplace',
   },
