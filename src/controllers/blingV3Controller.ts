@@ -938,13 +938,9 @@ export default {
     }
     console.log(newOrderData)
 
-    const newOrder = await prisma.orders
-      .create({
-        data: newOrderData,
-      })
-      .catch((error) => {
-        return error
-      })
+    const newOrder = await prisma.orders.create({
+      data: newOrderData,
+    })
     console.log(newOrder)
 
     if (!newOrder?.id) {
