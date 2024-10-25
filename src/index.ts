@@ -109,4 +109,5 @@ async function updateAllTokens() {
   }
   isUpdatingTokens = false
 }
+updateAllTokens()
 setInterval(updateAllTokens, 60000)
