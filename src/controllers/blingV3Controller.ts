@@ -936,10 +936,15 @@ export default {
         : 'Amazon'
       newOrderData.pickup_name = pickupName
     }
+    console.log(newOrderData)
 
-    const newOrder = await prisma.orders.create({
-      data: newOrderData,
-    })
+    const newOrder = await prisma.orders
+      .create({
+        data: newOrderData,
+      })
+      .catch((error) => {
+        return error
+      })
     console.log(newOrder)
 
     if (!newOrder?.id) {
