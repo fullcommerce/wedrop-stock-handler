@@ -109,7 +109,7 @@ export default {
     )
     const orders = []
 
-    for (let i = 1; i <= 200; i++) {
+    for (let i = 1; i <= 10; i++) {
       const responseOrders = await blingClient.getSellOrders({
         initDate,
         endDate: stopDate,
