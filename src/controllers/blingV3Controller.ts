@@ -109,7 +109,7 @@ export default {
     )
     const orders = []
 
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 200; i++) {
       const responseOrders = await blingClient.getSellOrders({
         initDate,
         endDate: stopDate,
@@ -433,9 +433,11 @@ export default {
       },
       midia: {
         imagens: {
-          externas: {
-            link: `https://app.wedropbr.com.br/img/1000x1000/13/${kit.products[0].image}`,
-          },
+          imagensURL: [
+            {
+              link: `https://app.wedropbr.com.br/img/1000x1000/13/${kit.products[0].image}`,
+            },
+          ],
         },
       },
       linhaProduto: {
@@ -605,7 +607,7 @@ export default {
       },
       midia: {
         imagens: {
-          externas: images.map((img) => ({
+          imagensURL: images.map((img) => ({
             link: `https://app.wedropbr.com.br/img/1000x1000/13/${img}`,
           })),
         },
@@ -721,6 +723,7 @@ export default {
         id: true,
       },
     })
+    console.log('isOrderExists', isOrderExists)
 
     if (isOrderExists) {
       return res.status(400).json({ message: 'Order already exists' })
@@ -902,7 +905,7 @@ export default {
         },
         numeroPedidoLoja: blingOrder.numeroLoja,
       }
-
+      console.log('tentando mercado livre')
       const shipmentType = await orderModel.verifyIfOrderIsFlex(dataToVerify)
       console.log('shipmentType', shipmentType)
       const pickupName =
@@ -941,7 +944,6 @@ export default {
     const newOrder = await prisma.orders.create({
       data: newOrderData,
     })
-    console.log(newOrder)
 
     if (!newOrder?.id) {
       return res.status(400).json({ erro: newOrder })
