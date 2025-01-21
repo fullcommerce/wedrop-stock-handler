@@ -933,13 +933,9 @@ export default {
       }
     }
     if (integration.keyword === 'amazon') {
-      const integrationParams = JSON.parse(integration.params)
-      const pickupName = integrationParams.logisticMode
-        ? integrationParams.logisticMode
-        : 'Amazon'
+      const pickupName = erp?.mode === 'J' ? `AMZL` : `PUDO`
       newOrderData.pickup_name = pickupName
     }
-    console.log(newOrderData)
 
     const newOrder = await prisma.orders.create({
       data: newOrderData,
